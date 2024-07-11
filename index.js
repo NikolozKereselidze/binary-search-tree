@@ -175,6 +175,56 @@ class Tree {
       return result;
     }
   }
+
+  height(node) {
+    if (node === null) return 0;
+
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
+
+    if (leftHeight > rightHeight) {
+      return leftHeight + 1;
+    } else {
+      return rightHeight + 1;
+    }
+  }
+
+  depth(node) {
+    let counter = 0;
+    if (node === null) return 0;
+    let rootNode = this.root;
+
+    while (rootNode.data !== node.data) {
+      if (node.data < rootNode.data) {
+        counter++;
+        rootNode = rootNode.left;
+      } else if (node.data > rootNode.data) {
+        counter++;
+        rootNode = rootNode.right;
+      }
+    }
+    return counter;
+  }
+
+  isBalanced() {
+    const checkBalance = (node) => {
+      if (node === null) return 0;
+
+      const leftHeight = checkBalance(node.left);
+      if (leftHeight === -1) return -1;
+
+      const rightHeight = checkBalance(node.right);
+      if (rightHeight === -1) return -1;
+
+      if (Math.abs(leftHeight - rightHeight) > 1) {
+        return -1;
+      }
+
+      return Math.max(leftHeight, rightHeight) + 1;
+    };
+
+    return checkBalance(this.root) !== -1;
+  }
 }
 
 const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
@@ -186,3 +236,6 @@ tree.deleteItem(324);
 tree.inOrder();
 tree.preOrder();
 tree.postOrder();
+tree.height(tree.root);
+tree.depth(tree.root);
+tree.isBalanced();
